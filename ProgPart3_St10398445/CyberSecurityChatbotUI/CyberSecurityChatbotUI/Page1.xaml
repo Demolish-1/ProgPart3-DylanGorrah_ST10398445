@@ -1,0 +1,241 @@
+﻿<Page x:Class="CyberSecurityChatbotUI.QuizPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Cyber Security Quiz"
+      Background="#0A0F2C">
+
+    <Page.Resources>
+        <!-- Quiz Button Style -->
+        <Style x:Key="QuizButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#192040"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FF66CC"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="border"
+                                    CornerRadius="10"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#2A3060"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#FF66CC" BlurRadius="10" ShadowDepth="0"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1A2050"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Correct Answer Style -->
+        <Style x:Key="CorrectAnswerStyle" TargetType="Button" BasedOn="{StaticResource QuizButtonStyle}">
+            <Setter Property="Background" Value="#2D5016"/>
+            <Setter Property="BorderBrush" Value="#4CAF50"/>
+        </Style>
+
+        <!-- Wrong Answer Style -->
+        <Style x:Key="WrongAnswerStyle" TargetType="Button" BasedOn="{StaticResource QuizButtonStyle}">
+            <Setter Property="Background" Value="#5D1616"/>
+            <Setter Property="BorderBrush" Value="#F44336"/>
+        </Style>
+
+        <!-- Primary Button Style -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF66CC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="25" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF88DD"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#FF66CC" BlurRadius="15" ShadowDepth="0"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <!-- Quiz Screen -->
+        <Grid x:Name="QuizScreen" Visibility="Visible">
+            <!-- Header -->
+            <Border Background="#192040" Height="80" VerticalAlignment="Top" CornerRadius="0,0,20,20">
+                <Grid>
+                    <TextBlock x:Name="QuizTitle" Text="🛡️ CYBER SECURITY QUIZ" 
+                               FontSize="24" FontWeight="Bold" Foreground="#FF66CC"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0">
+                        <TextBlock Text="Score: " FontSize="16" Foreground="White" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="ScoreText" Text="0" FontSize="16" FontWeight="Bold" Foreground="#FF66CC" VerticalAlignment="Center"/>
+                        <TextBlock Text=" | Question: " FontSize="16" Foreground="White" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <TextBlock x:Name="QuestionNumberText" Text="1/10" FontSize="16" FontWeight="Bold" Foreground="#FF66CC" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Progress Bar -->
+            <ProgressBar x:Name="ProgressBar" Height="6" VerticalAlignment="Top" Margin="0,80,0,0"
+                         Background="#192040" Foreground="#FF66CC" BorderThickness="0" Value="10"/>
+
+            <!-- Question Content -->
+            <Grid x:Name="QuestionContent" Margin="40,120,40,40">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Question Text -->
+                <Border Grid.Row="0" Background="#192040" CornerRadius="15" Padding="30" Margin="0,0,0,30">
+                    <TextBlock x:Name="QuestionText" 
+                               Text="What is the most common type of cyber attack?"
+                               FontSize="18" Foreground="White" TextWrapping="Wrap"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+
+                <!-- Answer Options -->
+                <StackPanel x:Name="AnswerOptions" Grid.Row="1" VerticalAlignment="Center">
+                    <Button x:Name="Option1" Content="A) Phishing attacks" Style="{StaticResource QuizButtonStyle}" Click="AnswerButton_Click" Tag="0"/>
+                    <Button x:Name="Option2" Content="B) Malware attacks" Style="{StaticResource QuizButtonStyle}" Click="AnswerButton_Click" Tag="1"/>
+                    <Button x:Name="Option3" Content="C) DDoS attacks" Style="{StaticResource QuizButtonStyle}" Click="AnswerButton_Click" Tag="2"/>
+                    <Button x:Name="Option4" Content="D) SQL injection" Style="{StaticResource QuizButtonStyle}" Click="AnswerButton_Click" Tag="3"/>
+                </StackPanel>
+
+                <!-- Next Button -->
+                <Button x:Name="NextButton" Grid.Row="2" Content="Next Question ➤" 
+                        Style="{StaticResource PrimaryButtonStyle}" Width="200"
+                        HorizontalAlignment="Center" Visibility="Collapsed" Click="NextButton_Click"/>
+            </Grid>
+        </Grid>
+
+        <!-- Results Screen -->
+        <Grid x:Name="ResultsScreen" Visibility="Collapsed" Opacity="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Results Header -->
+            <Border Grid.Row="0" Background="#192040" Height="100" CornerRadius="0,0,20,20">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock x:Name="ResultsTitle" Text="🏆 QUIZ COMPLETED!" 
+                               FontSize="28" FontWeight="Bold" Foreground="#FF66CC" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="FinalScoreText" Text="Your Score: 0/10" 
+                               FontSize="20" Foreground="White" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Score Entry -->
+            <Grid Grid.Row="1" Margin="40">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Performance Message -->
+                <Border Grid.Row="0" Background="#192040" CornerRadius="15" Padding="30" Margin="0,0,0,30">
+                    <TextBlock x:Name="PerformanceMessage" 
+                               Text="Excellent work! You're a cybersecurity expert!"
+                               FontSize="18" Foreground="White" TextWrapping="Wrap"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+
+                <!-- Name Entry -->
+                <Border Grid.Row="1" Background="#192040" CornerRadius="15" Padding="20" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="Enter your name for the leaderboard:" 
+                                   FontSize="16" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                        <TextBox x:Name="PlayerNameTextBox" Height="40" FontSize="16" 
+                                 Background="#0A0F2C" Foreground="White" BorderBrush="#FF66CC" BorderThickness="2"
+                                 HorizontalAlignment="Center" Width="300" Padding="10"
+                                 Text="Anonymous Player"/>
+                        <Button x:Name="SaveScoreButton" Content="💾 Save to Leaderboard" 
+                                Style="{StaticResource PrimaryButtonStyle}" Width="250" Margin="0,15,0,0"
+                                HorizontalAlignment="Center" Click="SaveScoreButton_Click"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Leaderboard -->
+                <Border Grid.Row="2" Background="#192040" CornerRadius="15" Padding="20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="🏆 LEADERBOARD" FontSize="18" FontWeight="Bold" 
+                                   Foreground="#FF66CC" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl x:Name="LeaderboardList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#0A0F2C" CornerRadius="8" Padding="15" Margin="0,2">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="40"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="{Binding Rank}" FontWeight="Bold" Foreground="#FF66CC"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="White" Margin="10,0"/>
+                                                <TextBlock Grid.Column="2" Text="{Binding Score}" FontWeight="Bold" Foreground="#FF66CC"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Action Buttons -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <Button x:Name="PlayAgainButton" Content="🔄 Play Again" 
+                        Style="{StaticResource PrimaryButtonStyle}" Width="150" Margin="10"
+                        Click="PlayAgainButton_Click"/>
+                <Button x:Name="BackToMenuButton" Content="🏠 Main Menu" 
+                        Style="{StaticResource PrimaryButtonStyle}" Width="150" Margin="10"
+                        Click="BackToMenuButton_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
